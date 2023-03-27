@@ -26,6 +26,7 @@ exports.getSingleBook = asyncHandler(async (req, res, next) => {
 exports.updateBook = asyncHandler(async (req, res, next) => {
   const [rowsUpdated, [updatedBook]] = await Book.update(req.body, {
     where: { id: req.params.id },
+    returning: true
   });
   if (!updatedBook) {
     return next(
