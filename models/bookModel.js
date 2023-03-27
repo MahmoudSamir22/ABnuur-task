@@ -10,14 +10,23 @@ Book.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    name: {
+    title: {
       type: DataTypes.STRING,
       unique: true,
-      allowNull: false
+      allowNull: false,
     },
     author: {
-        type: DataTypes.STRING
-    }
+      type: DataTypes.STRING,
+    },
+    publisher: {
+      type: DataTypes.STRING,
+    },
+    description: {
+      type: DataTypes.STRING,
+    },
+    image: {
+      type: DataTypes.STRING,
+    },
   },
   { sequelize: db, modelName: "book" }
 );

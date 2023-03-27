@@ -3,6 +3,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 const ApiError = require("../utils/apiError");
 
+// @desc Check If user logged in
+// @route Middleware
 exports.auth = asyncHandler(async (req, res, next) => {
   let token;
   if (req.headers.authorization) {
@@ -28,4 +30,12 @@ exports.auth = asyncHandler(async (req, res, next) => {
   next();
 });
 
-exports.allowedTo = asyncHandler(async (req, res, next) => {});
+// @desc Make routes secure for spesific role
+// @route Middleware
+exports.allowedTo = (...roles) =>
+  asyncHandler(async (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(new ApiError("This user not allowed to use this route", 403));
+    }
+    next();
+  });
