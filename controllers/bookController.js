@@ -1,7 +1,25 @@
 const asyncHandler = require("express-async-handler");
+const sharp = require("sharp");
+const { v4: uuidv4 } = require("uuid");
+const createFolder = require('../utils/folderCreate')
 
 const ApiError = require("../utils/apiError");
 const Book = require("../models/bookModel");
+
+exports.resizeBookImage = asyncHandler(async (req, res, next) => {
+  if (req.file) {
+    const fileName = `Book-${Date.now()}-${uuidv4()}.jpeg`;
+    const filePath = "uploads/books";
+    createFolder(filePath)
+    await sharp(req.file.buffer)
+      .resize(600, 600)
+      .toFormat("jpeg", { quality: 90 })
+      .toFile(`${filePath}/${fileName}`);
+
+    req.body.image = `${filePath}/${fileName}`
+  }
+  next()
+});
 
 exports.addBook = asyncHandler(async (req, res, next) => {
   const book = await Book.create(req.body);
@@ -26,7 +44,7 @@ exports.getSingleBook = asyncHandler(async (req, res, next) => {
 exports.updateBook = asyncHandler(async (req, res, next) => {
   const [rowsUpdated, [updatedBook]] = await Book.update(req.body, {
     where: { id: req.params.id },
-    returning: true
+    returning: true,
   });
   if (!updatedBook) {
     return next(

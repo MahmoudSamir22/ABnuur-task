@@ -1,4 +1,4 @@
-const { DataTypes, Model, STRING } = require("sequelize");
+const { DataTypes, Model } = require("sequelize");
 const bcrypt = require("bcryptjs");
 const db = require("../database/dbConnection");
 
@@ -30,6 +30,10 @@ User.init(
       type: DataTypes.ENUM("user", "admin"),
       defaultValue: "user",
     },
+    isEmailVerified:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   },
   { sequelize: db, modelName: "user" }
 );

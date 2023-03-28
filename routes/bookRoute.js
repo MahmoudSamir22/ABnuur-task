@@ -6,10 +6,23 @@ const {
   getSingleBook,
   updateBook,
   deleteBook,
+  resizeBookImage,
 } = require("../controllers/bookController");
+
+const { uploadSingleImage } = require("../middlewares/fileUploadMiddleware");
+
 const { auth, allowedTo } = require("../middlewares/authMiddleware");
 
-router.route("/").post(auth, allowedTo("admin"), addBook).get(getBooks);
+router
+  .route("/")
+  .post(
+    auth,
+    allowedTo("admin"),
+    uploadSingleImage("image"),
+    resizeBookImage,
+    addBook
+  )
+  .get(getBooks);
 
 router
   .route("/:id")
