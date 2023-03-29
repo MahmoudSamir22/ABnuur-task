@@ -1,5 +1,5 @@
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
-const { body, check } = require("express-validator");
+const { body } = require("express-validator");
 const User = require("../../models/userModel");
 
 exports.signupValidator = [
@@ -16,7 +16,7 @@ exports.signupValidator = [
         return true
     }),
   body("password").notEmpty().withMessage("Password is required"),
-  role('role').optional(),
-  validatorMiddleware()
+  body('role').optional(),
+  validatorMiddleware
 ];
 
